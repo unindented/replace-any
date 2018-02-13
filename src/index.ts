@@ -1,9 +1,13 @@
 export interface Replacer<T> {
   regexp: RegExp;
-  replace: (index: number, ...match: string[]) => T;
+  replace: (key: string, ...match: string[]) => T;
 }
 
-function replaceFragment<T>(replacer: Replacer<T>, fragment: string) {
+function replaceFragment<T>(
+  replacer: Replacer<T>,
+  fragment: string,
+  key: string,
+) {
   const { regexp, replace } = replacer;
   if (!regexp.global) {
     throw new Error("regular expression must be a global match");
@@ -30,7 +34,7 @@ function replaceFragment<T>(replacer: Replacer<T>, fragment: string) {
     }
 
     // Append link to result.
-    elements.push(replace(index, ...match));
+    elements.push(replace(`${key}:${index}`, ...match));
 
     // Update last index.
     lastIndex = index + text.length;
@@ -50,12 +54,13 @@ function replaceFragment<T>(replacer: Replacer<T>, fragment: string) {
 function replaceFragments<T>(
   replacer: Replacer<T>,
   fragments: Array<string | T>,
+  key: string,
 ) {
   return fragments.reduce(
-    (memo, fragment) => {
+    (memo, fragment, index) => {
       return memo.concat(
         typeof fragment === "string"
-          ? replaceFragment(replacer, fragment)
+          ? replaceFragment(replacer, fragment, `${key}:${index}`)
           : fragment,
       );
     },
@@ -63,10 +68,10 @@ function replaceFragments<T>(
   );
 }
 
-export function replaceAll<T>(replacers: Array<Replacer<T>>, str: string) {
+export function replaceAny<T>(replacers: Array<Replacer<T>>, str: string) {
   return replacers.reduce(
-    (memo, replacer) => {
-      return replaceFragments(replacer, memo);
+    (memo, replacer, index) => {
+      return replaceFragments(replacer, memo, `${index}`);
     },
     [str] as Array<string | T>,
   );
