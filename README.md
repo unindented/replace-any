@@ -1,4 +1,4 @@
-# replace-any
+# replace-any [![Version](https://img.shields.io/npm/v/replace-any.svg)](https://www.npmjs.com/package/replace-any) [![Build Status](https://img.shields.io/travis/unindented/replace-any.svg)](http://travis-ci.org/unindented/replace-any)
 
 Flexible string replacement.
 
