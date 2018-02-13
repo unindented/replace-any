@@ -1,6 +1,6 @@
 {
   "name": "replace-any",
-  "description": "Flexible string replacement library.",
+  "description": "Flexible string replacement.",
   "version": "0.0.1",
   "license": "MIT",
   "author": {
